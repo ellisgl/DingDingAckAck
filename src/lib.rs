@@ -133,7 +133,7 @@
 /// let mut buffer: Vec<u8> = vec![0; 38];
 /// buffer[0] = 0x06;
 /// buffer[1] = 0x01;
-/// buffer[2] = 0x05;
+/// buffer[2] = 0x07;
 /// buffer[3] = 0x00;
 /// buffer[4] = 0x01;
 /// buffer[5] = 0x00;
@@ -142,14 +142,14 @@
 ///
 /// let expected = ProtocolMessage {
 ///     message_type: MessageType::ResponseSuccess,
-///     command: Command::Read,
+///     command: Command::Ping,
 ///     variable: 0x00,
 ///     data: vec![0x00],
 /// };
 /// assert_eq!(
 ///     expected,
 ///     ddaa_protocol::parse_protocol_message(&mut buffer).unwrap(),
-///     "Type: Response Success, Command: Read, Variable: 0x00, Data: [0x00]"
+///     "Type: Response Success, Command: Ping, Variable: 0x00, Data: [0x00]"
 /// );
 /// ```
 /// ```
@@ -396,7 +396,7 @@ pub fn parse_protocol_message(data: &mut Vec<u8>) -> Option<ProtocolMessage> {
             return None; // Incomplete message, return None.
         }
 
-        if (data[0] == 0x07 || data[0] == 0x06) && data[1] == 0x01 {
+        if (data[0] == 0x07 || data[0] == 0x06 || data[0] == 0x15) && data[1] == 0x01 {
             // Vector shifted to correct starting position.
             break;
         }

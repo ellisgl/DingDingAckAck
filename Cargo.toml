@@ -1,6 +1,6 @@
 [package]
 name = "ddaa_protocol"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "Ding Ding Ack Ack: A simple protocol aimed towards serial communication with a microcontroller."
 license = "BSD-3-Clause"
