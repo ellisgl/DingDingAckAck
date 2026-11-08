@@ -39,7 +39,7 @@ assert_eq!(message.data, vec![0x01]);
 * It returns `None` when a frame is incomplete and when a frame is invalid, so you can't tell the two apart.
 * It needs at least 8 bytes, so it never returns a frame with no data (N = 0).
 
-When you read from a serial port, collect bytes until you have a whole frame first, and then parse it. [MewtureButton-Host's `FrameAccumulator`](https://github.com/ellisgl/MewtureButton-Host/blob/fix/ddaa-frame-reassembly/mewture_shared/src/frame.rs) does this.
+When you read from a serial port, collect bytes until you have a whole frame first, and then parse it. [MewtureButton-Host's `FrameAccumulator`](https://github.com/ellisgl/MewtureButton-Host/blob/main/mewture_shared/src/frame.rs) does this.
 
 ---
 
@@ -281,6 +281,6 @@ These notes cover behaviour that matters if you want to write a compatible imple
 |-------|----------|----------|
 | `parse_protocol_message` didn't accept `15 01` as a start pair, so it could never return a NAK frame. | `ddaa_protocol` 0.2.0 | `ddaa_protocol` 0.2.1 |
 | The crate README gave the end bytes at "6 + N + 1" and "6 + N + 2". In 1-based numbering they are at 6+N and 7+N. | `ddaa_protocol` 0.2.0 README | `ddaa_protocol` 0.2.1 |
-| The firmware found the end of a frame by scanning for `17 04`, so data containing `17 04` cut the frame short. If a frame overran the 39-byte buffer, the firmware kept overwriting its last two bytes. | Firmware `main` | Firmware branch `fix/ddaa-framing-and-dispatch` |
-| The firmware treated the next frame after a ping or read as the response to it. A host mute write that arrived in that window was discarded. The ACK to a button toggle was treated as an error and didn't refresh the liveness timer. | Firmware `main` | Firmware branch `fix/ddaa-framing-and-dispatch` |
-| The daemon parsed at most one frame per `read()` and then cleared its buffer. A frame split across two reads was lost, and if two frames arrived in one read, the second was dropped. | Host `main` | Host branch `fix/ddaa-frame-reassembly` |
+| The firmware found the end of a frame by scanning for `17 04`, so data containing `17 04` cut the frame short. If a frame overran the 39-byte buffer, the firmware kept overwriting its last two bytes. | Firmware before [PR #1](https://github.com/ellisgl/MewtureButton-Firmware/pull/1) | Firmware `main` ([PR #1](https://github.com/ellisgl/MewtureButton-Firmware/pull/1)) |
+| The firmware treated the next frame after a ping or read as the response to it. A host mute write that arrived in that window was discarded. The ACK to a button toggle was treated as an error and didn't refresh the liveness timer. | Firmware before [PR #1](https://github.com/ellisgl/MewtureButton-Firmware/pull/1) | Firmware `main` ([PR #1](https://github.com/ellisgl/MewtureButton-Firmware/pull/1)) |
+| The daemon parsed at most one frame per `read()` and then cleared its buffer. A frame split across two reads was lost, and if two frames arrived in one read, the second was dropped. | Host 0.1.25 and earlier | Host `main` ([PR #14](https://github.com/ellisgl/MewtureButton-Host/pull/14)) |

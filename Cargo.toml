@@ -4,3 +4,5 @@ version = "0.2.1"
 edition = "2021"
 description = "Ding Ding Ack Ack: A simple protocol aimed towards serial communication with a microcontroller."
 license = "BSD-3-Clause"
+repository = "https://github.com/ellisgl/DingDingAckAck"
+exclude = [".vscode/", "*.code-workspace"]
